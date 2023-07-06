@@ -11,15 +11,17 @@ def get_solution(question):
         response = requests.get(api_url)
         data = response.text
         print(data)
-
+        solution = ''
+        while True:
         # Извлекаем решение из ответа
-        data = data.replace('<plaintext>', '',1)
-        data = data.replace('</plaintext>', '',1)
-        #solution = data[start_index:end_index].strip()
-
-        start_index = data.find('<plaintext>') + len('<plaintext>')
-        end_index = data.find('</plaintext>')
-        solution = data[start_index:end_index].strip()
+            start_index = data.find('<plaintext>') + len('<plaintext>')
+            if data.find('<plaintext>') !=-1:
+                end_index = data.find('</plaintext>')
+                solution += data[start_index:end_index].strip()+'\n'
+                data = data.replace('<plaintext>', '', 1)
+                data = data.replace('</plaintext>', '', 1)
+            else:
+                break
 
         return solution
     except requests.exceptions.RequestException:
@@ -27,9 +29,12 @@ def get_solution(question):
         return None
 
 # Пример использования
-question = '2 + 2 - 56'
+question = 'x^2 + x - 9 = 0'
+
+if '+' in question:
+    question = question.replace('+', '%2B')
 solution = get_solution(question)
-if solution:
-    print(f'Решение: {solution}')
-else:
-    print('Не удалось получить решение.')
+
+print(f'Решение: {solution}')
+# else:
+#     print('Не удалось получить решение.')
