@@ -33,6 +33,8 @@ question = 'x^2 + x - 9 = 0'
 
 if '+' in question:
     question = question.replace('+', '%2B')
+elif '*' in question:
+    question = question.replace('*', '×')
 solution = get_solution(question)
 
 print(f'Решение: {solution}')
